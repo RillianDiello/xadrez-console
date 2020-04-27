@@ -2,9 +2,9 @@ using System;
 using tabuleiro;
 namespace xadrez
 {
-    public class Rei : Peca
+    public class Torre : Peca
     {
-        public Rei(Tabuleiro tab, Cor cor) : base(tab,cor){}
+        public Torre(Tabuleiro tab, Cor cor) : base(tab,cor){}
 
         public override bool Equals(object obj)
         {
@@ -18,7 +18,7 @@ namespace xadrez
 
         public override string ToString()
         {
-            return "R";
+            return "T";
         }
     }
 }
