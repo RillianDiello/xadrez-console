@@ -21,9 +21,31 @@ namespace tabuleiro
             return pecas[linha,coluna];
         }
 
+        public Peca peca(Posicao pos){
+            return pecas[pos.linha, pos.coluna];
+        }
+
         public void adicionarPeca(Peca p, Posicao pos){
             pecas[pos.linha, pos.coluna] = p;
             p.posicao = pos;
+        }
+
+        public bool existePeca(Posicao pos){
+            validarPosicao(pos);
+            return peca(pos) != null;
+        }
+
+        public bool posicaoValida(Posicao posicao){
+            if(posicao.linha < 0 || posicao.linha > linhas || posicao.coluna < 0 || posicao.coluna > colunas){
+                return false;
+            }
+            return true;
+        }
+
+        public void validarPosicao(Posicao posicao){
+            if(!posicaoValida(posicao)){
+                throw new TabuleiroException("Posição inválida");
+            }
         }
 
         public override bool Equals(object obj)
