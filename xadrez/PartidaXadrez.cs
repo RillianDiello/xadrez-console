@@ -8,11 +8,15 @@ namespace xadrez
         private int turno;
         private Cor jogadorAtual;
 
+        public bool terminada {get; private set;}
+
         public PartidaXadrez(Tabuleiro tabuleiro, int turno, Cor jogadorAtual)
         {
             this.tabuleiro = tabuleiro;
             this.turno = turno;
             this.jogadorAtual = jogadorAtual;
+            this.terminada = false;
+            
             
         }
 
@@ -20,6 +24,7 @@ namespace xadrez
             tabuleiro = new Tabuleiro(8,8);
             turno = 1;
             jogadorAtual = Cor.Branca;
+            terminada = false;
             colocarPecas();
         }
 

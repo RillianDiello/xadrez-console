@@ -12,7 +12,20 @@ namespace xadrez_console
                 PartidaXadrez partida = new PartidaXadrez();
                 
 
-           
+                while(!partida.terminada){
+                    Console.Clear();
+                    Tela.imprimirTabuleiro(partida.tabuleiro);
+                    Console.WriteLine();
+                    Console.Write("Origem: ");
+                    Posicao origem = Tela.lerPosicaoXadrez().toPosicao();
+
+                    Console.Write("Destino: ");
+                    Posicao destino = Tela.lerPosicaoXadrez().toPosicao();
+
+                    partida.ExecutaMovimento(origem,destino);
+
+                    Console.WriteLine();
+                }
 
             // PosicaoXadrez posicaoXadrez = new PosicaoXadrez('c', 7);
             // Console.WriteLine(posicaoXadrez.toPosicao());
