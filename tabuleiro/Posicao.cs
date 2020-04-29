@@ -2,7 +2,12 @@ namespace tabuleiro
 {
     public class Posicao
     {
-        public Posicao(int linha, int coluna)
+       
+       
+        public int linha { get; set; }
+        public int coluna { get; set; }
+
+         public Posicao(int linha, int coluna)
         {
             this.linha = linha;
             this.coluna = coluna;
@@ -13,9 +18,10 @@ namespace tabuleiro
 
         }
 
-       
-        public int linha { get; set; }
-        public int coluna { get; set; }
+        public void definirValores(int linha, int coluna){
+            this.linha = linha;
+            this.coluna = coluna;
+        }
 
         public override bool Equals(object obj)
         {

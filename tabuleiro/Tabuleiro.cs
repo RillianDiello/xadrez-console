@@ -17,11 +17,11 @@ namespace tabuleiro
             pecas = new Peca[linhas, colunas];
         }
 
-        public Peca peca(int linha, int coluna){
-            return pecas[linha,coluna];
+       public Peca peca(int linha, int coluna) {
+            return pecas[linha, coluna];
         }
 
-        public Peca peca(Posicao pos){
+        public Peca peca(Posicao pos) {
             return pecas[pos.linha, pos.coluna];
         }
 
@@ -48,16 +48,16 @@ namespace tabuleiro
             return peca(pos) != null;
         }
 
-        public bool posicaoValida(Posicao posicao){
-            if(posicao.linha < 0 || posicao.linha > linhas || posicao.coluna < 0 || posicao.coluna > colunas){
+         public bool posicaoValida(Posicao pos) {
+            if (pos.linha<0 || pos.linha>=linhas || pos.coluna<0 || pos.coluna>=colunas) {
                 return false;
             }
             return true;
         }
 
-        public void validarPosicao(Posicao posicao){
-            if(!posicaoValida(posicao)){
-                throw new TabuleiroException("Posição inválida");
+        public void validarPosicao(Posicao pos) {
+            if (!posicaoValida(pos)) {
+                throw new TabuleiroException("Posição inválida!");
             }
         }
 

@@ -6,7 +6,7 @@ namespace xadrez
         public char coluna {get; set;}
         public int linha {get; set;}
 
-        public const int linhaX =8; 
+        public const int linhaX = 8; 
         public const char colunaX = 'a';
 
         public PosicaoXadrez(){}
@@ -16,10 +16,9 @@ namespace xadrez
             this.linha = linha;
         }
 
-        public Posicao toPosicao(){
+       public Posicao toPosicao() {
             return new Posicao(linhaX - linha, coluna - colunaX);
         }
-
         public override string ToString(){
             return "" + coluna + linha;
         }
