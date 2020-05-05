@@ -8,12 +8,15 @@ namespace xadrez_console
     {
         static void Main(string[] args)
         {
-            try{
+            try
+            {
                 PartidaXadrez partida = new PartidaXadrez();
-                
 
-                while(!partida.terminada){
-                    try{
+
+                while (!partida.terminada)
+                {
+                    try
+                    {
                         Console.Clear();
                         Tela.imprimirTabuleiro(partida.tabuleiro);
                         Console.WriteLine();
@@ -21,7 +24,7 @@ namespace xadrez_console
                         Console.WriteLine("Turno: " + partida.turno);
 
                         Console.WriteLine("Aguarndo jogada: " + partida.jogadorAtual);
-                        
+
                         Console.WriteLine();
                         Console.Write("Origem: ");
                         Posicao origem = Tela.lerPosicaoXadrez().toPosicao();
@@ -31,26 +34,31 @@ namespace xadrez_console
 
                         Console.Clear();
                         Tela.imprimirTabuleiro(partida.tabuleiro, posicoesPossiveis);
-                        
+
                         Console.WriteLine();
                         Console.Write("Destino: ");
                         Posicao destino = Tela.lerPosicaoXadrez().toPosicao();
+                        partida.validarPosicaoDestino(origem, destino);
 
-                    partida.realizaJogada(origem,destino);
+                        partida.realizaJogada(origem, destino);
 
                         Console.WriteLine();
-                
-                    }catch(TabuleiroException e){
+
+                    }
+                    catch (TabuleiroException e)
+                    {
                         Console.WriteLine(e.Message);
                         Console.Write("Press Enter to continue");
                         Console.ReadLine();
                     }
                 }
 
-            // PosicaoXadrez posicaoXadrez = new PosicaoXadrez('c', 7);
-            // Console.WriteLine(posicaoXadrez.toPosicao());
-            Tela.imprimirTabuleiro(partida.tabuleiro);
-            }catch(TabuleiroException e){
+                // PosicaoXadrez posicaoXadrez = new PosicaoXadrez('c', 7);
+                // Console.WriteLine(posicaoXadrez.toPosicao());
+                Tela.imprimirTabuleiro(partida.tabuleiro);
+            }
+            catch (TabuleiroException e)
+            {
                 Console.WriteLine(e.Message);
             }
         }
