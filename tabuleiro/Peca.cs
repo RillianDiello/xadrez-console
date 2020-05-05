@@ -28,5 +28,21 @@ namespace tabuleiro
         }
 
         public abstract bool[,] movimentosPossiveis();
+
+/// <summary>
+/// Metodo que verifica se eu posso mover a peça em questão
+/// </summary>
+/// <returns></returns>
+        public bool existeMovimentosPossiveis(){
+            bool [,] mat = movimentosPossiveis();
+
+            for (int i = 0; i < tab.linhas; i++){
+                for (int j = 0; j < tab.colunas; j++)
+                {
+                   if(mat[i,j]) return true;
+                }                            
+            }
+            return false;
+        }
     }
 }

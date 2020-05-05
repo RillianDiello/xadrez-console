@@ -5,8 +5,8 @@ namespace xadrez
     public class PartidaXadrez
     {
         public Tabuleiro tabuleiro{get;private set;}
-        private int turno;
-        private Cor jogadorAtual;
+        public int turno{get; private set; }
+        public Cor jogadorAtual{get; private set;}
 
         public bool terminada {get; private set;}
 
@@ -16,8 +16,6 @@ namespace xadrez
             this.turno = turno;
             this.jogadorAtual = jogadorAtual;
             this.terminada = false;
-            
-            
         }
 
         public PartidaXadrez(){
@@ -55,6 +53,38 @@ namespace xadrez
             tabuleiro.adicionarPeca(new Cavalo(tabuleiro, Cor.Preta), new PosicaoXadrez('e',8).toPosicao());
             tabuleiro.adicionarPeca(new Rei(tabuleiro, Cor.Preta), new PosicaoXadrez('d',8).toPosicao());
             
+        }
+
+        public void realizaJogada(Posicao origem, Posicao destino){
+            ExecutaMovimento(origem, destino);
+            turno++;
+            mudaJoador();
+            
+        }
+
+        private void mudaJoador(){
+            if(jogadorAtual == Cor.Branca) 
+                jogadorAtual = Cor.Preta;
+            else jogadorAtual = Cor.Branca;
+        }
+
+/// <summary>
+/// Método que valida se uma determinada posição origem de movimento
+/// 1) Contem uma peça
+/// 2) A peça pertence ao jogador do Turno
+/// 3) A peça não está com movimentos bloqueados
+/// </summary>
+/// <param name="origem"></param>
+        public void validarPosicaoOrigem(Posicao origem){
+            if(tabuleiro.peca(origem) == null){
+                throw new TabuleiroException("Não existe peça na posição de origem escolhida");
+            } if(jogadorAtual != tabuleiro.peca(origem).cor){
+                throw new TabuleiroException("A peça de origem não pertence a este jogador");
+            }if(!tabuleiro.peca(origem).existeMovimentosPossiveis()){
+                throw new TabuleiroException("Não existem movimentos possiveis para a peça selecionada");
+            }
+
+
         }
     }
 }
