@@ -97,6 +97,10 @@ namespace xadrez_console
             Console.WriteLine("Turno: " + partida.turno);
 
             Console.WriteLine("Aguarndo jogada: " + partida.jogadorAtual);
+
+            if(partida.xeque){
+                Console.Write("XEQUE!");
+            }
         }
 
         /// <summary>
