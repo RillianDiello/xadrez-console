@@ -1,4 +1,6 @@
+using System.Runtime.InteropServices;
 using System;
+using System.Collections.Generic;
 using tabuleiro;
 namespace xadrez
 {
@@ -10,12 +12,17 @@ namespace xadrez
 
         public bool terminada { get; private set; }
 
+        private HashSet<Peca> pecas; // guarda todas as peças do jogo
+        private HashSet<Peca> capturadas; // guarda as peças capturadas
+
         public PartidaXadrez(Tabuleiro tabuleiro, int turno, Cor jogadorAtual)
         {
             this.tabuleiro = tabuleiro;
             this.turno = turno;
             this.jogadorAtual = jogadorAtual;
             this.terminada = false;
+            pecas = new HashSet<Peca>();
+            capturadas = new HashSet<Peca>();
         }
 
         public PartidaXadrez()
@@ -24,37 +31,92 @@ namespace xadrez
             turno = 1;
             jogadorAtual = Cor.Branca;
             terminada = false;
+            pecas = new HashSet<Peca>();
+            capturadas = new HashSet<Peca>();
             colocarPecas();
         }
 
+        /// <summary>
+        /// Metodo que realiza movimentos e adiciona peças ao conjunto de peças capturadas quando necessário
+        /// </summary>
+        /// <param name="origem"></param>
+        /// <param name="destino"></param>
         public void ExecutaMovimento(Posicao origem, Posicao destino)
         {
             Peca p = tabuleiro.removerPeca(origem);
             p.incrementaMovimentos();
-            Peca capturada = tabuleiro.removerPeca(destino);
-
+            Peca pecaCapturada = tabuleiro.removerPeca(destino);
             tabuleiro.adicionarPeca(p, destino);
+
+            if (pecaCapturada != null)
+            {
+                capturadas.Add(pecaCapturada);
+            }
         }
 
+        /// <summary>
+        /// Método que retorna todas as peças capturadas de uma dada cor
+        /// </summary>
+        /// <param name="cor"></param>
+        /// <returns></returns>
+        public HashSet<Peca> pecasCapturadas(Cor cor)
+        {
+            HashSet<Peca> retorno = new HashSet<Peca>();
 
+            foreach (Peca item in capturadas)
+            {
+                if (item.cor == cor) retorno.Add(item);
+            }
+            return retorno;
+        }
 
+        /// <summary>
+        /// Metodo que retorna as peças ainda em jogo de uma dada cor
+        /// </summary>
+        /// <param name="cor"></param>
+        /// <returns></returns>
+        public HashSet<Peca> pecasEmJogo(Cor cor)
+        {
+            HashSet<Peca> pecasEmJogo = new HashSet<Peca>();
+            foreach (Peca item in pecas)
+            {
+                if (item.cor == cor) pecasEmJogo.Add(item);
+            }
+
+            pecasEmJogo.ExceptWith(pecasCapturadas(cor));
+
+            return pecasEmJogo;
+        }
+
+        /// <summary>
+        /// Metodo que adiciona uma peça ao tabuleiro
+        /// </summary>
+        /// <param name="coluna"></param>
+        /// <param name="linha"></param>
+        /// <param name="pecaAdd"></param>
+        public void colocarNovaPeca(char coluna, int linha, Peca pecaAdd)
+        {
+            tabuleiro.adicionarPeca(pecaAdd, new PosicaoXadrez(coluna, linha).toPosicao());
+            pecas.Add(pecaAdd);
+        }
+        /// <summary>
+        /// Metodo privado apeas para iniciar as peças no jogo
+        /// </summary>
         private void colocarPecas()
         {
+            colocarNovaPeca('c', 1, new Torre(tabuleiro, Cor.Branca));
+            colocarNovaPeca('c', 2, new Torre(tabuleiro, Cor.Branca));
+            colocarNovaPeca('d', 2, new Bispo(tabuleiro, Cor.Branca));
+            colocarNovaPeca('e', 2, new Bispo(tabuleiro, Cor.Branca));
+            colocarNovaPeca('e', 1, new Cavalo(tabuleiro, Cor.Branca));
+            colocarNovaPeca('d', 1, new Rei(tabuleiro, Cor.Branca));
 
-
-            tabuleiro.adicionarPeca(new Torre(tabuleiro, Cor.Branca), new PosicaoXadrez('c', 1).toPosicao());
-            tabuleiro.adicionarPeca(new Torre(tabuleiro, Cor.Branca), new PosicaoXadrez('c', 2).toPosicao());
-            tabuleiro.adicionarPeca(new Bispo(tabuleiro, Cor.Branca), new PosicaoXadrez('d', 2).toPosicao());
-            tabuleiro.adicionarPeca(new Bispo(tabuleiro, Cor.Branca), new PosicaoXadrez('e', 2).toPosicao());
-            tabuleiro.adicionarPeca(new Cavalo(tabuleiro, Cor.Branca), new PosicaoXadrez('e', 1).toPosicao());
-            tabuleiro.adicionarPeca(new Rei(tabuleiro, Cor.Branca), new PosicaoXadrez('d', 1).toPosicao());
-
-            tabuleiro.adicionarPeca(new Torre(tabuleiro, Cor.Preta), new PosicaoXadrez('c', 8).toPosicao());
-            tabuleiro.adicionarPeca(new Torre(tabuleiro, Cor.Preta), new PosicaoXadrez('c', 7).toPosicao());
-            tabuleiro.adicionarPeca(new Bispo(tabuleiro, Cor.Preta), new PosicaoXadrez('d', 7).toPosicao());
-            tabuleiro.adicionarPeca(new Bispo(tabuleiro, Cor.Preta), new PosicaoXadrez('e', 7).toPosicao());
-            tabuleiro.adicionarPeca(new Cavalo(tabuleiro, Cor.Preta), new PosicaoXadrez('e', 8).toPosicao());
-            tabuleiro.adicionarPeca(new Rei(tabuleiro, Cor.Preta), new PosicaoXadrez('d', 8).toPosicao());
+            colocarNovaPeca('c', 8, new Torre(tabuleiro, Cor.Preta));
+            colocarNovaPeca('c', 7, new Torre(tabuleiro, Cor.Preta));
+            colocarNovaPeca('d', 7, new Bispo(tabuleiro, Cor.Preta));
+            colocarNovaPeca('e', 7, new Bispo(tabuleiro, Cor.Preta));
+            colocarNovaPeca('e', 8, new Cavalo(tabuleiro, Cor.Preta));
+            colocarNovaPeca('d', 8, new Rei(tabuleiro, Cor.Preta));
 
         }
 
@@ -103,7 +165,8 @@ namespace xadrez
         /// <param name="destino"></param>
         public void validarPosicaoDestino(Posicao origem, Posicao destino)
         {
-            if(!tabuleiro.peca(origem).podeMoverPara(destino)){
+            if (!tabuleiro.peca(origem).podeMoverPara(destino))
+            {
                 throw new TabuleiroException("Posição de destino inválida!");
             }
         }
