@@ -57,7 +57,7 @@ namespace tabuleiro
         /// </summary>
         /// <param name="destino"></param>
         /// <returns></returns>
-        public bool podeMoverPara(Posicao destino)
+        public bool movimentoPossivel(Posicao destino)
         {
             return movimentosPossiveis()[destino.linha, destino.coluna];
         }
