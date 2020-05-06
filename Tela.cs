@@ -89,18 +89,28 @@ namespace xadrez_console
         /// <param name="partida"></param>
         public static void imprimirPartida(PartidaXadrez partida)
         {
-            
+
             Tela.imprimirTabuleiro(partida.tabuleiro);
             Console.WriteLine();
             imprimirPecasCapturadas(partida);
 
             Console.WriteLine("Turno: " + partida.turno);
 
-            Console.WriteLine("Aguarndo jogada: " + partida.jogadorAtual);
+            if (!partida.terminada)
+            {
+                Console.WriteLine("Aguarndo jogada: " + partida.jogadorAtual);
 
-            if(partida.xeque){
-                Console.Write("XEQUE!");
+                if (partida.xeque)
+                {
+                    Console.Write("XEQUE!");
+                }
+            }else{
+                Console.WriteLine("XEQUEMATE!");
+                Console.WriteLine("Vencedor: "+ partida.jogadorAtual);
             }
+            
+
+
         }
 
         /// <summary>

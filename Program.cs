@@ -50,7 +50,8 @@ namespace xadrez_console
 
                 // PosicaoXadrez posicaoXadrez = new PosicaoXadrez('c', 7);
                 // Console.WriteLine(posicaoXadrez.toPosicao());
-                Tela.imprimirTabuleiro(partida.tabuleiro);
+                Console.Clear();
+                Tela.imprimirPartida(partida);
             }
             catch (TabuleiroException e)
             {

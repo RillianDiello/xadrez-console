@@ -96,6 +96,51 @@ namespace xadrez
 
             return false;
         }
+
+        /// <summary>
+        /// Metodo que dada uma cor, verifica se o Rei se encontra em uma posição de Xeque Mate
+        /// </summary>
+        /// <param name="cor"></param>
+        /// <returns></returns>
+        public bool testeXequeMate(Cor cor)
+        {
+            if (!estaEmXeque(cor))
+            {
+                return false;
+            }
+
+
+            /*
+            Laco que verifica se existem alguma peça em jogo da cor 
+            que pode realizar um movimento e retirar o rei da posição de xeque
+            Obs: Importante entender que ele faz o movimento, obtem o status do xeque
+            desfaz o movimento e somente então realiza a verificação que pode gerar um retorno
+            */
+            foreach (Peca item in pecasEmJogo(cor))
+            {
+                bool[,] matPos = item.movimentosPossiveis();
+                for (int i = 0; i < tabuleiro.linhas; i++)
+                {
+                    for (int j = 0; j < tabuleiro.colunas; j++)
+                    {
+                        if (matPos[i, j])
+                        {
+                            Posicao origem = item.posicao;
+                            Posicao destino = new Posicao(i, j);
+                            Peca capturada = ExecutaMovimento(origem, destino);
+                            bool testeXeque = estaEmXeque(cor);
+                            desfazMovimento(origem, destino, capturada);
+                            if (!testeXeque)
+                            {
+                                return false;
+                            }
+                        }
+
+                    }
+                }
+            }
+            return true;
+        }
         /// <summary>
         /// Metodo que realiza movimentos e adiciona peças ao conjunto de peças capturadas quando necessário
         /// </summary>
@@ -164,22 +209,35 @@ namespace xadrez
         /// <summary>
         /// Metodo privado apeas para iniciar as peças no jogo
         /// </summary>
+        // private void colocarPecas()
+        // {
+        //     colocarNovaPeca('c', 1, new Torre(tabuleiro, Cor.Branca));
+        //     colocarNovaPeca('c', 2, new Torre(tabuleiro, Cor.Branca));
+        //     colocarNovaPeca('d', 2, new Bispo(tabuleiro, Cor.Branca));
+        //     colocarNovaPeca('e', 2, new Bispo(tabuleiro, Cor.Branca));
+        //     colocarNovaPeca('e', 1, new Cavalo(tabuleiro, Cor.Branca));
+        //     colocarNovaPeca('d', 1, new Rei(tabuleiro, Cor.Branca));
+
+        //     colocarNovaPeca('c', 8, new Torre(tabuleiro, Cor.Preta));
+        //     colocarNovaPeca('c', 7, new Torre(tabuleiro, Cor.Preta));
+        //     colocarNovaPeca('d', 7, new Bispo(tabuleiro, Cor.Preta));
+        //     colocarNovaPeca('e', 7, new Bispo(tabuleiro, Cor.Preta));
+        //     colocarNovaPeca('e', 8, new Cavalo(tabuleiro, Cor.Preta));
+        //     colocarNovaPeca('d', 8, new Rei(tabuleiro, Cor.Preta));
+
+        // }
+
         private void colocarPecas()
         {
             colocarNovaPeca('c', 1, new Torre(tabuleiro, Cor.Branca));
-            colocarNovaPeca('c', 2, new Torre(tabuleiro, Cor.Branca));
+            colocarNovaPeca('h', 7, new Torre(tabuleiro, Cor.Branca));
             colocarNovaPeca('d', 2, new Bispo(tabuleiro, Cor.Branca));
             colocarNovaPeca('e', 2, new Bispo(tabuleiro, Cor.Branca));
             colocarNovaPeca('e', 1, new Cavalo(tabuleiro, Cor.Branca));
             colocarNovaPeca('d', 1, new Rei(tabuleiro, Cor.Branca));
 
-            colocarNovaPeca('c', 8, new Torre(tabuleiro, Cor.Preta));
-            colocarNovaPeca('c', 7, new Torre(tabuleiro, Cor.Preta));
-            colocarNovaPeca('d', 7, new Bispo(tabuleiro, Cor.Preta));
-            colocarNovaPeca('e', 7, new Bispo(tabuleiro, Cor.Preta));
-            colocarNovaPeca('e', 8, new Cavalo(tabuleiro, Cor.Preta));
-            colocarNovaPeca('d', 8, new Rei(tabuleiro, Cor.Preta));
-
+            colocarNovaPeca('a', 8, new Rei(tabuleiro, Cor.Preta));
+            colocarNovaPeca('b', 8, new Torre(tabuleiro, Cor.Preta));
         }
 
         /// <summary>
@@ -204,6 +262,11 @@ namespace xadrez
             else
             {
                 xeque = false;
+            }
+
+            if (testeXequeMate(adversario(jogadorAtual)))
+            {
+                terminada = true;
             }
 
             turno++;
