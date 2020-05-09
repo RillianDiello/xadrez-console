@@ -158,6 +158,28 @@ namespace xadrez
                 capturadas.Add(pecaCapturada);
             }
 
+            //# jogadaEspecial roque pequeno
+            if (p is Rei && destino.coluna == origem.coluna + 2)
+            {
+                Posicao origemTower = new Posicao(origem.linha, origem.coluna + 3); //+ tres pos é a posição da torre
+                Posicao destinoTower = new Posicao(origem.linha, origem.coluna + 1); //+ um pois no roque a torre fica uma posição do rei
+
+                Peca Tower = tabuleiro.removerPeca(origemTower);
+                Tower.incrementaMovimentos();
+                tabuleiro.adicionarPeca(Tower, destinoTower);
+            }
+
+             //# jogadaEspecial roque grande
+            if (p is Rei && destino.coluna == origem.coluna - 2 )
+            {
+                Posicao origemTower = new Posicao(origem.linha, origem.coluna - 4); //+ tres pos é a posição da torre
+                Posicao destinoTower = new Posicao(origem.linha, origem.coluna - 1); //+ um pois no roque a torre fica uma posição do rei
+
+                Peca Tower = tabuleiro.removerPeca(origemTower);
+                Tower.incrementaMovimentos();
+                tabuleiro.adicionarPeca(Tower, destinoTower);
+            }
+
             return pecaCapturada;
         }
 
@@ -209,7 +231,8 @@ namespace xadrez
         /// <summary>
         /// Metodo privado apeas para iniciar as peças no jogo
         /// </summary>
-        private void colocarPecas() {
+        private void colocarPecas()
+        {
             colocarNovaPeca('a', 1, new Torre(tabuleiro, Cor.Branca));
             colocarNovaPeca('b', 1, new Cavalo(tabuleiro, Cor.Branca));
             colocarNovaPeca('c', 1, new Bispo(tabuleiro, Cor.Branca));
@@ -309,6 +332,29 @@ namespace xadrez
                 capturadas.Remove(pecaCapturada);
             }
             tabuleiro.adicionarPeca(p, origem);
+
+
+             //# jogadaEspecial roque pequeno
+            if (p is Rei && destino.coluna == origem.coluna + 2)
+            {
+                Posicao origemTower = new Posicao(origem.linha, origem.coluna + 3); //+ tres pos é a posição da torre
+                Posicao destinoTower = new Posicao(origem.linha, origem.coluna + 1); //+ um pois no roque a torre fica uma posição do rei
+
+                Peca Tower = tabuleiro.removerPeca(origemTower);
+                Tower.decrementaMovimentos();
+                tabuleiro.adicionarPeca(Tower, destinoTower);
+            }
+
+              //# jogadaEspecial roque pequeno
+            if (p is Rei && destino.coluna == origem.coluna - 2)
+            {
+                Posicao origemTower = new Posicao(origem.linha, origem.coluna - 4); //+ tres pos é a posição da torre
+                Posicao destinoTower = new Posicao(origem.linha, origem.coluna - 1); //+ um pois no roque a torre fica uma posição do rei
+
+                Peca Tower = tabuleiro.removerPeca(origemTower);
+                Tower.decrementaMovimentos();
+                tabuleiro.adicionarPeca(Tower, destinoTower);
+            }
         }
 
         private void mudaJoador()
