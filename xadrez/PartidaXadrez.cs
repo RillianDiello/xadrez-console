@@ -17,7 +17,7 @@ namespace xadrez
 
         public bool xeque { get; private set; }
 
-        public Peca vuneralvelEnPassant{get; private set;}
+        public Peca vuneralvelEnPassant { get; private set; }
 
         public PartidaXadrez(Tabuleiro tabuleiro, int turno, Cor jogadorAtual)
         {
@@ -302,6 +302,21 @@ namespace xadrez
                 desfazMovimento(origem, destino, pecaCapturada);
                 throw new TabuleiroException("Você não pode se colocar em Xeque");
             }
+
+            //# jogadaespecial
+            if (pecaMovida is Peao)
+            {
+                if ((pecaMovida.cor == Cor.Branca && destino.linha == 0)
+                || (pecaMovida.cor == Cor.Preta && destino.linha == 8))
+                {
+                    pecaMovida = tabuleiro.removerPeca(destino);
+                    pecas.Remove(pecaMovida);
+                    Peca dama = new Rainha(tabuleiro, pecaMovida.cor);
+                    tabuleiro.adicionarPeca(dama, destino);
+                    pecas.Add(dama);
+                }
+            }
+
             if (estaEmXeque(adversario(jogadorAtual)))
             {
                 xeque = true;
@@ -315,26 +330,35 @@ namespace xadrez
             {
                 terminada = true;
             }
-
-            turno++;
-            mudaJoador();
+            else
+            {
+                turno++;
+                mudaJoador();
+            }
 
             // #jogadaEspecial = en passant
-            if (pecaMovida is Peao && (destino.linha == origem.linha - 2 
+            if (pecaMovida is Peao && (destino.linha == origem.linha - 2
                                         || destino.linha == origem.linha + 2))
             {
                 vuneralvelEnPassant = pecaMovida;
-            }else{
+            }
+            else
+            {
                 vuneralvelEnPassant = null;
             }
 
             // jogadaEspecial en passant
-            if(pecaMovida is Peao){
-                if(origem.coluna != destino.coluna && pecaCapturada == null){
+            if (pecaMovida is Peao)
+            {
+                if (origem.coluna != destino.coluna && pecaCapturada == null)
+                {
                     Posicao posP;
-                    if(pecaMovida.cor == Cor.Branca){
-                        posP = new Posicao(destino.linha +1, destino.coluna);
-                    }else{
+                    if (pecaMovida.cor == Cor.Branca)
+                    {
+                        posP = new Posicao(destino.linha + 1, destino.coluna);
+                    }
+                    else
+                    {
                         posP = new Posicao(destino.linha - 1, destino.coluna);
                     }
                     pecaCapturada = tabuleiro.removerPeca(posP);
@@ -385,13 +409,18 @@ namespace xadrez
             }
 
             // #jogadaEspecial en passant
-            if(p is Peca){
-                if(origem.coluna != destino.coluna && pecaCapturada == vuneralvelEnPassant){
+            if (p is Peca)
+            {
+                if (origem.coluna != destino.coluna && pecaCapturada == vuneralvelEnPassant)
+                {
                     Peca peao = tabuleiro.removerPeca(destino);
                     Posicao posP;
-                    if (p.cor == Cor.Branca){
-                        posP = new Posicao(3, destino.coluna);                        
-                    }else{
+                    if (p.cor == Cor.Branca)
+                    {
+                        posP = new Posicao(3, destino.coluna);
+                    }
+                    else
+                    {
                         posP = new Posicao(4, destino.coluna);
                     }
                     tabuleiro.adicionarPeca(peao, posP);
