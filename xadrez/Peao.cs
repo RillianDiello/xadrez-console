@@ -4,7 +4,11 @@ namespace xadrez
 {
     public class Peao : Peca
     {
-        public Peao(Tabuleiro tab, Cor cor) : base(tab, cor) { }
+        private PartidaXadrez partida;
+        public Peao(Tabuleiro tab, Cor cor, PartidaXadrez partida) : base(tab, cor)
+        {
+            this.partida = partida;
+        }
 
         public override bool Equals(object obj)
         {
@@ -62,6 +66,23 @@ namespace xadrez
                     mat[pos.linha, pos.coluna] = true;
                 }
 
+                // #jogadaEspecial en passant
+                if (posicao.linha == 3)
+                {
+                    Posicao esquerda = new Posicao(posicao.linha, posicao.coluna - 1);
+                    if (tab.posicaoValida(esquerda) && existeInimigo(esquerda)
+                                                   && tab.peca(esquerda) == partida.vuneralvelEnPassant)
+                    {
+                       mat[esquerda.linha -1, esquerda.coluna] = true;
+                    }
+                     Posicao direita = new Posicao(posicao.linha, posicao.coluna + 1);
+                    if (tab.posicaoValida(esquerda) && existeInimigo(esquerda)
+                                                   && tab.peca(esquerda) == partida.vuneralvelEnPassant)
+                    {
+                       mat[direita.linha -1 , direita.coluna] = true;
+                    }
+                }
+
             }
             else
             {
@@ -86,6 +107,24 @@ namespace xadrez
                 {
                     mat[pos.linha, pos.coluna] = true;
                 }
+
+                // #jogadaEspecial en passant
+                if (posicao.linha == 4)
+                {
+                    Posicao esquerda = new Posicao(posicao.linha, posicao.coluna - 1);
+                    if (tab.posicaoValida(esquerda) && existeInimigo(esquerda)
+                                                   && tab.peca(esquerda) == partida.vuneralvelEnPassant)
+                    {
+                       mat[esquerda.linha + 1, esquerda.coluna] = true;
+                    }
+                     Posicao direita = new Posicao(posicao.linha, posicao.coluna + 1);
+                    if (tab.posicaoValida(esquerda) && existeInimigo(esquerda)
+                                                   && tab.peca(esquerda) == partida.vuneralvelEnPassant)
+                    {
+                       mat[direita.linha + 1, direita.coluna] = true;
+                    }
+                }
+
 
             }
 
